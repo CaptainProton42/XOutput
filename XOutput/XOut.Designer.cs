@@ -36,6 +36,8 @@
             this.settingsLabel = new System.Windows.Forms.LinkLabel();
             this.notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
             this.tipLabel = new System.Windows.Forms.Label();
+            this.checkStartOnStartup = new System.Windows.Forms.CheckBox();
+            this.checkToTrayOnStartup = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // StartStopBtn
@@ -99,11 +101,35 @@
             this.tipLabel.TabIndex = 12;
             this.tipLabel.Text = "tipLabel";
             // 
+            // checkStartOnStartup
+            // 
+            this.checkStartOnStartup.AutoSize = true;
+            this.checkStartOnStartup.Location = new System.Drawing.Point(12, 354);
+            this.checkStartOnStartup.Name = "checkStartOnStartup";
+            this.checkStartOnStartup.Size = new System.Drawing.Size(98, 17);
+            this.checkStartOnStartup.TabIndex = 13;
+            this.checkStartOnStartup.Text = "Start on startup";
+            this.checkStartOnStartup.UseVisualStyleBackColor = true;
+            this.checkStartOnStartup.CheckedChanged += new System.EventHandler(this.checkStartOnStartup_CheckedChanged);
+            // 
+            // checkToTrayOnStartup
+            // 
+            this.checkToTrayOnStartup.AutoSize = true;
+            this.checkToTrayOnStartup.Location = new System.Drawing.Point(139, 354);
+            this.checkToTrayOnStartup.Name = "checkToTrayOnStartup";
+            this.checkToTrayOnStartup.Size = new System.Drawing.Size(148, 17);
+            this.checkToTrayOnStartup.TabIndex = 14;
+            this.checkToTrayOnStartup.Text = "Minimize to tray on startup";
+            this.checkToTrayOnStartup.UseVisualStyleBackColor = true;
+            this.checkToTrayOnStartup.CheckedChanged += new System.EventHandler(this.checkToTrayOnStartup_CheckedChanged);
+            // 
             // XOut
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(484, 355);
+            this.ClientSize = new System.Drawing.Size(484, 383);
+            this.Controls.Add(this.checkToTrayOnStartup);
+            this.Controls.Add(this.checkStartOnStartup);
             this.Controls.Add(this.tipLabel);
             this.Controls.Add(this.settingsLabel);
             this.Controls.Add(this.controllerList);
@@ -137,5 +163,7 @@
         private System.Windows.Forms.LinkLabel settingsLabel;
         private System.Windows.Forms.NotifyIcon notifyIcon;
         private System.Windows.Forms.Label tipLabel;
+        private System.Windows.Forms.CheckBox checkStartOnStartup;
+        private System.Windows.Forms.CheckBox checkToTrayOnStartup;
     }
 }

@@ -1,5 +1,6 @@
 ﻿using SlimDX.DirectInput;
 using System;
+using System.IO;
 using System.Windows.Forms;
 using System.Collections.Generic;
 
@@ -7,10 +8,13 @@ namespace XOutput
 {
     public partial class XOut : Form
     {
+        private bool startOnStartup;
+        private bool toTrayOnStartup;
 
         public XOut()
         {
             InitializeComponent();
+            loadOptions();
             tipLabel.Text = "";
             this.controllerList.ItemCheck += (sender, e) => enabledChanged(e.Index, e.NewValue);
         }
@@ -22,7 +26,24 @@ namespace XOutput
 
         private void XOut_Shown(object sender, EventArgs e)
         {
+            if (toTrayOnStartup)
+            {
+                this.WindowState = FormWindowState.Minimized; // TOOD: Add option for this
+            }
+
             UpdateInfo(controllerManager.detectControllers());
+
+            if (startOnStartup)
+            {
+                if (controllerManager.Start())
+                {
+                    StartStopBtn.Text = "Stop";
+                    controllerList.Enabled = false;
+                    isExclusive.Enabled = false;
+                    notifyIcon.Text = ("XOutput\nEmulating " + controllerManager.pluggedDevices + " device(s).");
+                    notifyIcon.Icon = Properties.Resources.AppIcon;
+                }
+            }
         }
 
         private void XOut_Closing(object sender, FormClosingEventArgs e)
@@ -40,6 +61,8 @@ namespace XOutput
             {
                 if (controllerManager.Start())
                 {
+                    this.WindowState = FormWindowState.Minimized; // TOOD: Add option for this
+
                     StartStopBtn.Text = "Stop";
                     controllerList.Enabled = false;
                     isExclusive.Enabled = false;
@@ -181,6 +204,39 @@ namespace XOutput
         private void controllerList_MouseLeave(object sender, EventArgs e)
         {
             tipLabel.Text = "";
+        }
+
+        private void checkToTrayOnStartup_CheckedChanged(object sender, EventArgs e)
+        {
+            toTrayOnStartup = checkToTrayOnStartup.Checked;
+            saveOptions();
+        }
+
+        private void checkStartOnStartup_CheckedChanged(object sender, EventArgs e)
+        {
+            startOnStartup = checkStartOnStartup.Checked;
+            saveOptions();
+        }
+
+        private void saveOptions()
+        {
+            string fileName = @"options.cfg";
+            string[] lines = { startOnStartup.ToString(), toTrayOnStartup.ToString() };
+            File.WriteAllLines(fileName, lines);
+        }
+
+        private void loadOptions()
+        {
+            string fileName = @"options.cfg";
+            if (File.Exists(fileName))
+            {
+                string[] lines = File.ReadAllLines(fileName);
+                startOnStartup = Convert.ToBoolean(lines[0]);
+                toTrayOnStartup = Convert.ToBoolean(lines[1]);
+            }
+
+            checkToTrayOnStartup.Checked = toTrayOnStartup;
+            checkStartOnStartup.Checked = startOnStartup;
         }
     }
 }
